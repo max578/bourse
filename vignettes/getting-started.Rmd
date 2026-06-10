@@ -1,0 +1,97 @@
+---
+title: "Getting started with bourse"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with bourse}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r}
+library(bourse)
+```
+
+## What bourse does
+
+`bourse` is the market-data connector of the ORCHESTRA analytics framework: it
+fetches cryptocurrency OHLCV candles from public exchange APIs and returns them
+as a contract-typed, provenance-labelled series. It is the trading-domain
+counterpart of the `terroir` geo-data collector, and it is built around one
+discipline -- the **Independent Oracle Principle (IOP)**: a fact about an
+exchange (a symbol, a price tick size, a fee, a column's unit) is *unverified*
+until it has been diffed against the exchange's own catalogue. For a trading
+system that is not bookkeeping; an unverified tick size or fee is a silently
+wrong number that loses money.
+
+## Two outcomes: a series, or a refusal
+
+`bourse_ohlcv()` returns either a grounded `market_series` or a `bourse_refusal`.
+It refuses rather than returning a number it cannot stand behind. Here we parse a
+recorded candle fixture offline (the live path uses the suggested `httr2`).
+
+```{r}
+fixture <- cbind(
+  open_time = c(1.5e12, 1.5e12 + 86400000),
+  open = c(100, 102), high = c(105, 106), low = c(99, 101),
+  close = c(102, 104), volume = c(1200, 1500))
+
+series <- bourse_ohlcv("BTCUSDT", interval = "1d", candles = fixture)
+series
+series@grounding
+```
+
+The series is `[unverified]` -- not because the candles are wrong, but because
+nothing has yet confirmed that this symbol, its tick size, and the column meaning
+match the exchange's catalogue. A consumer on a live order path gates on this.
+
+An unknown source, or malformed candles, is refused:
+
+```{r}
+bourse_ohlcv("BTCUSDT", candles = fixture, source = "nasdaq")
+```
+
+## The provenance registry
+
+Every fact bourse asserts is in a registry, with the date it was last checked.
+Until the oracle runs, every family is honestly `[unverified]`:
+
+```{r}
+bourse_fact_status("binance")
+```
+
+## Grounding: the catalogue-diff oracle
+
+`bourse_catalogue_diff()` is the only operation that grounds a fact. It diffs the
+asserted facts against the exchange's own `/exchangeInfo` catalogue (here a
+recorded catalogue shape; live by default). Families that agree are grounded with
+a real date; the rest stay `[unverified]`.
+
+```{r}
+info <- list(symbols = list(list(
+  symbol = "BTCUSDT", baseAsset = "BTC", quoteAsset = "USDT",
+  filters = list(
+    list(filterType = "PRICE_FILTER", tickSize = "0.01"),
+    list(filterType = "LOT_SIZE", stepSize = "0.00001"),
+    list(filterType = "MIN_NOTIONAL", minNotional = "5")))))
+
+bourse_catalogue_diff("binance", symbols = "BTCUSDT", exchange_info = info)
+```
+
+Now the same series is grounded, because the facts it rests on have been verified
+against the authority:
+
+```{r}
+bourse_ohlcv("BTCUSDT", candles = fixture)@grounding
+```
+
+## Why this matters for the orchestra
+
+`bourse` feeds the trading members (`kalmix`, `proxymix`) and the `decideR`
+decision layer. Because the series carries its grounding label, an un-grounded
+price feed propagates worst-case through the pipeline and `decideR` forces a flat
+position -- the capital firewall. The connector's honesty is the trading system's
+risk control.

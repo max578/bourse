@@ -1,0 +1,27 @@
+Package: bourse
+Title: Grounded Market-Data Connector for the ORCHESTRA Framework
+Version: 0.0.0.9000
+Authors@R:
+    person(given = "Max",
+           family = "Moldovan",
+           email = "max.moldovan@adelaide.edu.au",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9680-8474"))
+Description: Fetches historical and live market data (cryptocurrency OHLCV and related series) from public exchange APIs and emits it as a contract-typed, provenance-labelled series for the ORCHESTRA analytics framework. Every external fact -- a symbol, a price tick size, a fee schedule, a column unit -- is recorded in a provenance registry and treated as unverified until it has been diffed against the exchange own catalogue (the Independent Oracle Principle); an ungrounded fact triggers refusal rather than a silently wrong number.
+License: MIT + file LICENSE
+URL: https://github.com/max578/bourse
+BugReports: https://github.com/max578/bourse/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Config/testthat/edition: 3
+Imports:
+    S7,
+    stats
+Suggests:
+    httr2,
+    jsonlite,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
