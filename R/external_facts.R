@@ -22,7 +22,7 @@
       "symbols from /api/v3/exchangeInfo",
       "PRICE_FILTER tickSize per symbol",
       "LOT_SIZE stepSize per symbol",
-      "MIN_NOTIONAL minNotional per symbol",
+      "NOTIONAL (or legacy MIN_NOTIONAL) minNotional per symbol",
       "maker/taker from /sapi/v1/asset/tradeFee (auth) or docs default",
       "baseAsset/quoteAsset per symbol",
       "kline openTime/closeTime are ms since epoch, UTC",

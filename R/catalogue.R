@@ -33,7 +33,7 @@
 #'   symbol = "BTCUSDT", baseAsset = "BTC", quoteAsset = "USDT",
 #'   filters = list(list(filterType = "PRICE_FILTER", tickSize = "0.01"),
 #'                  list(filterType = "LOT_SIZE", stepSize = "0.00001"),
-#'                  list(filterType = "MIN_NOTIONAL", minNotional = "5")))))
+#'                  list(filterType = "NOTIONAL", minNotional = "5")))))
 #' bourse_catalogue_diff("binance", symbols = "BTCUSDT", exchange_info = info)
 #' @family grounding
 #' @export
@@ -72,7 +72,9 @@ bourse_catalogue_diff <- function(source = "binance", symbols = c("BTCUSDT"),
     symbol_universe     = length(present) == length(symbols) && length(present) > 0L,
     tick_size           = has_filter("PRICE_FILTER"),
     lot_size            = has_filter("LOT_SIZE"),
-    min_notional        = has_filter("MIN_NOTIONAL") || has_filter("NOTIONAL"),
+    # Binance spot migrated the MIN_NOTIONAL filter to NOTIONAL; accept either so
+    # the diff grounds on both current and legacy markets.
+    min_notional        = has_filter("NOTIONAL") || has_filter("MIN_NOTIONAL"),
     quote_base_currency = has_ccy,
     # the column semantics + timestamp convention are grounded by confirming the
     # catalogue is well-formed enough to anchor them (the same authority).

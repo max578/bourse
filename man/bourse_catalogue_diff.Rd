@@ -41,7 +41,7 @@ info <- list(symbols = list(list(
   symbol = "BTCUSDT", baseAsset = "BTC", quoteAsset = "USDT",
   filters = list(list(filterType = "PRICE_FILTER", tickSize = "0.01"),
                  list(filterType = "LOT_SIZE", stepSize = "0.00001"),
-                 list(filterType = "MIN_NOTIONAL", minNotional = "5")))))
+                 list(filterType = "NOTIONAL", minNotional = "5")))))
 bourse_catalogue_diff("binance", symbols = "BTCUSDT", exchange_info = info)
 }
 \seealso{
