@@ -131,3 +131,163 @@ fact_grounding <- function(source, fact_family) {
     grounding_unverified()
   }
 }
+
+# =============================================================================
+# Canonical recipe-52 registry (the /rpkg audit's F13/F14 contract surface)
+# =============================================================================
+# Derived from `.bourse_facts_seed()` so there is ONE source of truth for the
+# family list + asserted values (a drift-guard test asserts the two agree). The
+# seed is the *runtime* view (every family starts `[unverified]`, grounded live
+# by `bourse_catalogue_diff()`); `.external_facts` below is the *static*
+# provenance registry whose `verified_on` is set by the committed recorded-real
+# cassette evidence: the oracle tests replay
+# `tests/testthat/fixtures/binance_*BTCUSDT*.json` (recorded-real `/exchangeInfo`
+# + `/klines` captured 2026-06-11, hash-pinned in `fixtures/PROVENANCE.md`) and
+# diff the asserted facts against them on every run. No `verified_on` is ever
+# fabricated -- `fee_schedule` is genuinely un-grounded (its
+# `/sapi/v1/asset/tradeFee` endpoint is auth-gated and unimplemented) and stays
+# `verified_on = NA`, honestly `[unverified]`.
+#
+# `kind`/`oracle_types` encode the recipe-52 taxonomy. The schema/enum/units
+# families are *silent* (a wrong filter field or a mis-mapped kline column
+# returns wrong output with NO error), so they carry a D/E/F oracle: D = physical
+# / structural property invariants asserted on the recorded-real extract
+# (`test-properties-recorded.R`); E = differential of the asserted fact vs the
+# recorded-real authority response (`test-catalogue-diff.R`). B = catalogue diff
+# against the live / recorded `/exchangeInfo`; A = live resolution of the
+# endpoint (gated). All base R, so the audit can source this file in a vanilla
+# session.
+
+.BOURSE_SOURCE <- paste0(
+  "Binance public REST API (api.binance.com): /api/v3/exchangeInfo + ",
+  "/api/v3/klines; oracle = recorded-real cassette replay + live catalogue diff")
+
+# Capture date of the committed recorded-real fixtures (fixtures/PROVENANCE.md).
+.BOURSE_CASSETTE_ON <- "2026-06-11"
+
+.BOURSE_FACT_KIND <- c(
+  symbol_universe        = "enum",
+  tick_size              = "schema",
+  lot_size               = "schema",
+  min_notional           = "schema",
+  fee_schedule           = "constant",
+  quote_base_currency    = "schema",
+  timestamp_tz           = "units",
+  ohlcv_column_semantics = "schema")
+
+.BOURSE_FACT_ORACLE <- c(
+  symbol_universe        = "A,B,E",
+  tick_size              = "B,D,E",
+  lot_size               = "B,D,E",
+  min_notional           = "B,D,E",
+  fee_schedule           = "A",          # un-grounded: locator only, no D/E/F
+  quote_base_currency    = "B,E",
+  timestamp_tz           = "D,E",
+  ohlcv_column_semantics = "D,E")
+
+# Families the committed recorded-real cassette + oracle tests actually ground.
+# `fee_schedule` is FALSE on purpose -- not grounded, not pretended.
+.BOURSE_FACT_GROUNDED <- c(
+  symbol_universe        = TRUE,
+  tick_size              = TRUE,
+  lot_size               = TRUE,
+  min_notional           = TRUE,
+  fee_schedule           = FALSE,
+  quote_base_currency    = TRUE,
+  timestamp_tz           = TRUE,
+  ohlcv_column_semantics = TRUE)
+
+.external_facts <- local({
+  seed <- .bourse_facts_seed()
+  fams <- seed$fact_family
+  data.frame(
+    family       = fams,
+    fact_id      = paste0("binance.", fams),
+    kind         = unname(.BOURSE_FACT_KIND[fams]),
+    value        = seed$asserted_value,
+    source       = .BOURSE_SOURCE,
+    verified_on  = ifelse(.BOURSE_FACT_GROUNDED[fams],
+                          .BOURSE_CASSETTE_ON, NA_character_),
+    reverify_by  = "volatile",     # a live exchange API surface (90-day window)
+    oracle_types = unname(.BOURSE_FACT_ORACLE[fams]),
+    signoff      = NA_character_,
+    stringsAsFactors = FALSE)
+})
+
+# Silent-failure kinds: a wrong value returns wrong output with NO error, so a
+# live call "succeeding" is not enough -- they need a property / differential /
+# human oracle (D/E/F). (recipe 52 §2)
+.silent_fact_kinds <- c("enum", "crs", "units", "constant", "schema", "rule")
+
+# NA-safe ISO date parse (never errors on bad input).
+.parse_iso <- function(x) as.Date(as.character(x), format = "%Y-%m-%d")
+
+#' Validate the external-fact registry (gate F13/F14 contract)
+#'
+#' Pure-R, no network. Run by bourse's own tests and invoked by the `/rpkg`
+#' audit driver. Returns one row per family with `pass` (logical) and, on
+#' failure, a `reason`. Per-family: a family passes when every one of its rows
+#' has a non-empty `source` + a parseable, in-window `verified_on`, a non-empty
+#' `oracle_types` that includes a D/E/F oracle for silent kinds (and a `signoff`
+#' for `rule` kinds), AND the family is referenced by an independent-oracle test
+#' file. An un-grounded family (`verified_on = NA`, e.g. `fee_schedule`) honestly
+#' fails -- it is `[unverified]` by design, surfaced, never papered over.
+#'
+#' @param registry The registry `data.frame` (default `.external_facts`).
+#' @param test_dir Path to `tests/testthat` for the oracle-coverage check.
+#' @returns A `data.frame`: `family`, `pass` (logical), `reason`.
+#' @noRd
+#' @keywords internal
+.validate_external_registry <- function(registry = .external_facts,
+                                        test_dir = "tests/testthat") {
+  oracle_files <- list.files(
+    test_dir,
+    pattern = "test-(contract-live|catalogue-diff|properties-recorded)\\.R$",
+    full.names = TRUE)
+  oracle_blob <- if (length(oracle_files)) paste(
+    vapply(oracle_files, function(f) paste(readLines(f, warn = FALSE),
+                                           collapse = "\n"), character(1L)),
+    collapse = "\n") else ""
+
+  window <- c(volatile = 90L, stable = 365L, literature = .Machine$integer.max)
+
+  per_family <- function(f) {
+    sub <- registry[registry$family == f, , drop = FALSE]
+    reasons <- character()
+    if (any(!nzchar(sub$source) | is.na(sub$source)))
+      reasons <- c(reasons, "empty `source`")
+    vd <- .parse_iso(sub$verified_on)
+    if (any(is.na(vd))) {
+      reasons <- c(reasons, "[unverified]: no grounding date")
+    } else {
+      days <- vapply(sub$reverify_by, function(p)
+        if (p %in% names(window)) window[[p]] else NA_integer_, integer(1L))
+      if (any(!is.na(days) & as.integer(Sys.Date() - vd) > days))
+        reasons <- c(reasons, "past re-grounding window")
+    }
+    if (any(!nzchar(sub$oracle_types) | is.na(sub$oracle_types)))
+      reasons <- c(reasons, "empty `oracle_types`")
+    if (any(sub$kind %in% .silent_fact_kinds &
+              !grepl("[DEF]", sub$oracle_types)))
+      reasons <- c(reasons, "silent kind without a D/E/F oracle (recipe 52 §2)")
+    if (any(sub$kind == "rule" &
+              (is.na(sub$signoff) | !nzchar(sub$signoff))))
+      reasons <- c(reasons, "`rule` kind without a `signoff`")
+    covered <- grepl(f, oracle_blob, fixed = TRUE) ||
+      any(grepl(sub$fact_id, oracle_blob, fixed = TRUE))
+    if (!covered)
+      reasons <- c(reasons,
+                   "no independent-oracle test references this family (F14)")
+    list(pass = length(reasons) == 0L,
+         reason = if (length(reasons)) paste(reasons, collapse = "; ")
+                  else NA_character_)
+  }
+
+  fams <- registry$family
+  res <- lapply(fams, per_family)
+  data.frame(
+    family = fams,
+    pass   = vapply(res, `[[`, logical(1L), "pass"),
+    reason = vapply(res, `[[`, character(1L), "reason"),
+    stringsAsFactors = FALSE)
+}

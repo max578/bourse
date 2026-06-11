@@ -25,3 +25,25 @@ the Independent Oracle Principle as a first-class constraint from day one.
 The live exchange path uses the suggested `httr2` + `jsonlite`; the parsing,
 grounding, and refusal logic is exercised offline against recorded-real
 catalogue and candle fixtures.
+
+## External data contracts
+
+* Recorded-real Binance cassettes (`tests/testthat/fixtures/binance_*BTCUSDT*.json`,
+  captured 2026-06-11, hash-pinned in `fixtures/PROVENANCE.md`) now back the
+  offline oracle: `test-catalogue-diff.R` replays a real `/exchangeInfo` response
+  and `test-properties-recorded.R` asserts physical / structural invariants on it
+  (the silent-escape schema / units facts). These replace the prior hand-authored
+  fixtures -- the circular mock that let a stale filter name pass green.
+* **Corrected the spot minimum-notional filter to `NOTIONAL`** -- Binance
+  migrated it from the legacy `MIN_NOTIONAL`, and the live exchange exposes
+  `NOTIONAL`. The catalogue diff accepts either for back-compat; the
+  recorded-real property test fails loudly if a re-record reintroduces the
+  legacy name.
+* `.external_facts` is now the canonical recipe-52 registry (`family`, `kind`,
+  `value`, `source`, `verified_on`, `reverify_by`, `oracle_types`, `signoff`),
+  validated per-family by `.validate_external_registry()` (gate F13/F14). Seven
+  fact families are grounded by the recorded-real cassette; `fee_schedule` is
+  honestly reported `[unverified]` (its auth-gated `/sapi` endpoint is
+  unimplemented).
+* `data-raw/record_fixtures.R` re-captures the cassettes against the live
+  authority and prints the new hashes (the recipe-52 re-grounding script).

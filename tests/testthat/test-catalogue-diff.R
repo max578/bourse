@@ -1,16 +1,24 @@
 # The catalogue-diff oracle is the only thing that moves a fact from
-# [unverified] to grounded. Offline tests run it against a recorded-real
-# catalogue shape (NOT a self-authored golden of bourse's own making -- the
-# structure mirrors Binance's /exchangeInfo). A network test grounds against the
-# live authority, skipped on CRAN and offline.
+# [unverified] to grounded. The offline tests replay a RECORDED-REAL Binance
+# /exchangeInfo response captured from the live authority
+# (fixtures/binance_exchangeInfo_BTCUSDT.json, hash-pinned in
+# fixtures/PROVENANCE.md) -- NOT a hand-authored golden of bourse's own making,
+# which is the circular mock that let the legacy `MIN_NOTIONAL` name ride green
+# until the round-3 grounding audit caught it against the live authority. A
+# separate network test grounds against the live authority (skipped on CRAN /
+# offline).
 
-.recorded_exchange_info <- function(symbol = "BTCUSDT") {
-  list(symbols = list(list(
-    symbol = symbol, baseAsset = "BTC", quoteAsset = "USDT",
-    filters = list(
-      list(filterType = "PRICE_FILTER", tickSize = "0.01"),
-      list(filterType = "LOT_SIZE", stepSize = "0.00001"),
-      list(filterType = "NOTIONAL", minNotional = "5")))))
+.recorded_exchange_info <- function() {
+  skip_if_not_installed("jsonlite")
+  path <- testthat::test_path("fixtures", "binance_exchangeInfo_BTCUSDT.json")
+  # Meta-oracle (recipe 52 §8): a silent re-record changes the hash and fails
+  # here, so a fixture can never quietly drift away from the real authority.
+  if (!identical(unname(tools::md5sum(path)),
+                 "9a468c45aa53a3a7783fc31b68ac5528")) {
+    stop("recorded cassette hash drift: re-run data-raw/record_fixtures.R and ",
+         "update PROVENANCE.md + the asserted hashes.", call. = FALSE)
+  }
+  jsonlite::fromJSON(path, simplifyVector = FALSE)
 }
 
 test_that("the oracle grounds families that agree with the catalogue", {
@@ -30,7 +38,7 @@ test_that("the oracle grounds families that agree with the catalogue", {
 test_that("a symbol absent from the catalogue is reported absent, not grounded", {
   .registry_init()
   rep <- bourse_catalogue_diff("binance", symbols = "DOGEUSDT",
-                               exchange_info = .recorded_exchange_info("BTCUSDT"))
+                               exchange_info = .recorded_exchange_info())
   expect_identical(rep$status[rep$fact_family == "symbol_universe"], "absent")
   expect_identical(fact_grounding("binance", "symbol_universe"),
                    grounding_unverified())
