@@ -1,0 +1,22 @@
+# Citation metadata for the bourse package. The version is read from the
+# installed package's DESCRIPTION so the citation never drifts from the release.
+
+citHeader("To cite the bourse package in publications, use:")
+
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "{bourse}: Grounded Market-Data Connector for the ORCHESTRA Framework",
+  author   = person(
+    given   = "Max",
+    family  = "Moldovan",
+    email   = "max.moldovan@adelaide.edu.au",
+    comment = c(ORCID = "0000-0001-9680-8474")),
+  year     = "2026",
+  note     = note,
+  url      = "https://github.com/max578/bourse",
+  textVersion = paste0(
+    "Moldovan, M. (2026). bourse: Grounded Market-Data Connector for the ",
+    "ORCHESTRA Framework. ", note, ". https://github.com/max578/bourse")
+)

@@ -18,7 +18,8 @@ test_that("the canonical registry and the runtime seed describe the same familie
 test_that("the validator grounds the cassette-backed families and flags fee_schedule honestly", {
   res <- .validate_external_registry(test_dir = testthat::test_path())
   grounded <- c("symbol_universe", "tick_size", "lot_size", "min_notional",
-                "quote_base_currency", "timestamp_tz", "ohlcv_column_semantics")
+                "quote_base_currency", "timestamp_tz", "ohlcv_column_semantics",
+                "orderbook_column_semantics", "ticker_column_semantics")
   expect_true(all(res$pass[res$family %in% grounded]))
   # fee_schedule (auth-gated /sapi tradeFee, unimplemented) is genuinely
   # un-grounded -> honest fail, surfaced, never silently passed.

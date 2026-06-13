@@ -1,3 +1,64 @@
+# bourse 0.1.0.9000 (development)
+
+Broadens coverage from the single-symbol Binance-spot-OHLCV connector to a
+multi-symbol connector with three read-only market-data verbs, while keeping the
+Independent Oracle Principle (IOP) as a first-class constraint: every new
+external fact is grounded against a recorded-real authority response before it is
+trusted.
+
+## New features
+
+* `bourse_orderbook()` fetches or parses the top-of-book order book from
+  `/api/v3/depth` and returns a grounded `order_book` (the `bids` / `asks`
+  price/qty ladders), or a `bourse_refusal` -- including a refusal for a crossed
+  book (best bid not below best ask), the structural impossibility that catches a
+  transposed ladder.
+* `bourse_ticker()` fetches or parses the 24-hour rolling-window statistics from
+  `/api/v3/ticker/24hr` and returns a grounded `market_ticker`, or a refusal. Its
+  validator rejects an inverted high/low envelope.
+* Both verbs follow the established pattern: an offline parse path always
+  available (pass the recorded payload), a live path Suggests-gated on `httr2` +
+  `jsonlite`, an `obs_schema` describing each column's quantity and unit, and a
+  grounding label combined worst-case from the facts the object rests on.
+
+## Multi-symbol grounding
+
+* `bourse_catalogue_diff()` now grounds the multi-symbol core universe
+  (`BTCUSDT`, `ETHUSDT`, `BNBUSDT`, `SOLUSDT`) by default. Each requested
+  symbol's filters (tick size, lot size, minimum notional) and currencies must
+  agree with the catalogue for the corresponding family to ground; a single
+  missing symbol leaves `symbol_universe` `[unverified]`, not silently grounded.
+
+## External data contracts
+
+* Two new fact families -- `orderbook_column_semantics` and
+  `ticker_column_semantics` -- join the provenance registry, grounded by
+  recorded-real property oracles on the captured depth and ticker payloads.
+* The recorded-real cassettes were re-captured against the live Binance authority
+  on 2026-06-13 (the recipe-52 re-grounding step, restarting the 90-day window),
+  and a multi-symbol `/exchangeInfo` cassette was added. New cassettes:
+  `binance_exchangeInfo_multi.json`, `binance_depth_BTCUSDT.json`,
+  `binance_ticker24hr_BTCUSDT.json`. All are hash-pinned in
+  `fixtures/PROVENANCE.md` (sha256 + md5) with the `md5` asserted in-test as the
+  meta-oracle; a silent re-record fails loudly.
+* `data-raw/record_fixtures.R` now captures all five cassettes (single- and
+  multi-symbol catalogue, klines, depth, ticker) and prints their new hashes.
+
+## Known gaps
+
+* `fee_schedule` remains honestly `[unverified]`. Its authority is the
+  authenticated `/sapi/v1/asset/tradeFee` endpoint, which would introduce an API
+  credential surface; it is deliberately not implemented (see `SECURITY.md`). The
+  registry reports it `[unverified]` rather than substituting a documentation
+  default it cannot diff against the account's actual fee tier.
+
+## Release ceremony
+
+* Added `inst/CITATION` (version read from package metadata),
+  `CONTRIBUTING.md`, `SECURITY.md`, and `CODE_OF_CONDUCT.md`; completed
+  `_pkgdown.yml` with a grouped reference index; reconciled `.Rbuildignore` to
+  the files that exist.
+
 # bourse 0.0.0.9000 (development)
 
 First development version. `bourse` is the market-data connector of the ORCHESTRA

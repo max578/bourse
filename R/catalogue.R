@@ -21,7 +21,10 @@
 #' suggested `httr2` + `jsonlite`).
 #'
 #' @param source The source; currently `"binance"`.
-#' @param symbols Symbols to verify (default: a small core set).
+#' @param symbols Symbols to verify. The default is the grounded core universe
+#'   (`BTCUSDT`, `ETHUSDT`, `BNBUSDT`, `SOLUSDT`): every requested symbol's
+#'   filters (tick size, lot size, minimum notional) and currencies must agree
+#'   with the catalogue for the corresponding family to ground.
 #' @param exchange_info Optional recorded catalogue (the parsed `symbols` list
 #'   from `/exchangeInfo`).
 #' @return A `data.frame` report: `fact_family`, `status`
@@ -37,7 +40,8 @@
 #' bourse_catalogue_diff("binance", symbols = "BTCUSDT", exchange_info = info)
 #' @family grounding
 #' @export
-bourse_catalogue_diff <- function(source = "binance", symbols = c("BTCUSDT"),
+bourse_catalogue_diff <- function(source = "binance",
+                                  symbols = .BOURSE_CORE_SYMBOLS,
                                   exchange_info = NULL) {
   if (!identical(source, "binance")) {
     stop(sprintf("no catalogue oracle for source '%s'", source), call. = FALSE)
@@ -68,8 +72,9 @@ bourse_catalogue_diff <- function(source = "binance", symbols = c("BTCUSDT"),
     !is.null(by_symbol[[s]]$baseAsset) && !is.null(by_symbol[[s]]$quoteAsset)
   }, logical(1L)))
 
+  anchored <- length(present) > 0L
   checks <- list(
-    symbol_universe     = length(present) == length(symbols) && length(present) > 0L,
+    symbol_universe     = length(present) == length(symbols) && anchored,
     tick_size           = has_filter("PRICE_FILTER"),
     lot_size            = has_filter("LOT_SIZE"),
     # Binance spot migrated the MIN_NOTIONAL filter to NOTIONAL; accept either so
@@ -77,9 +82,13 @@ bourse_catalogue_diff <- function(source = "binance", symbols = c("BTCUSDT"),
     min_notional        = has_filter("NOTIONAL") || has_filter("MIN_NOTIONAL"),
     quote_base_currency = has_ccy,
     # the column semantics + timestamp convention are grounded by confirming the
-    # catalogue is well-formed enough to anchor them (the same authority).
-    ohlcv_column_semantics = length(present) > 0L,
-    timestamp_tz           = length(present) > 0L
+    # catalogue is well-formed enough to anchor them (the same authority), and
+    # corroborated by the recorded-real property oracles
+    # (test-properties-recorded.R) that assert the actual response shapes.
+    ohlcv_column_semantics     = anchored,
+    orderbook_column_semantics = anchored,
+    ticker_column_semantics    = anchored,
+    timestamp_tz               = anchored
   )
 
   on <- Sys.Date()

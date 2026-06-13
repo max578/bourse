@@ -12,6 +12,7 @@ Fetches historical and live market data (cryptocurrency OHLCV and related series
 Useful links:
 \itemize{
   \item \url{https://github.com/max578/bourse}
+  \item \url{https://max578.github.io/bourse}
   \item Report bugs at \url{https://github.com/max578/bourse/issues}
 }
 

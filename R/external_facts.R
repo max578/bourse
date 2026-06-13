@@ -14,7 +14,8 @@
 .bourse_facts_seed <- function() {
   fam <- c("symbol_universe", "tick_size", "lot_size", "min_notional",
            "fee_schedule", "quote_base_currency", "timestamp_tz",
-           "ohlcv_column_semantics")
+           "ohlcv_column_semantics", "orderbook_column_semantics",
+           "ticker_column_semantics")
   data.frame(
     source        = "binance",
     fact_family   = fam,
@@ -26,7 +27,9 @@
       "maker/taker from /sapi/v1/asset/tradeFee (auth) or docs default",
       "baseAsset/quoteAsset per symbol",
       "kline openTime/closeTime are ms since epoch, UTC",
-      "kline cols: 1=openTime 2=open 3=high 4=low 5=close 6=volume(base)"),
+      "kline cols: 1=openTime 2=open 3=high 4=low 5=close 6=volume(base)",
+      "depth bids/asks are [price(quote), qty(base)] ladders, best-first",
+      "ticker24hr lastPrice/openPrice/highPrice/lowPrice(quote), volume(base)"),
     oracle_kind   = NA_character_,
     verified_on   = as.Date(NA),
     evidence_path = NA_character_,
@@ -140,13 +143,14 @@ fact_grounding <- function(source, fact_family) {
 # seed is the *runtime* view (every family starts `[unverified]`, grounded live
 # by `bourse_catalogue_diff()`); `.external_facts` below is the *static*
 # provenance registry whose `verified_on` is set by the committed recorded-real
-# cassette evidence: the oracle tests replay
-# `tests/testthat/fixtures/binance_*BTCUSDT*.json` (recorded-real `/exchangeInfo`
-# + `/klines` captured 2026-06-11, hash-pinned in `fixtures/PROVENANCE.md`) and
-# diff the asserted facts against them on every run. No `verified_on` is ever
-# fabricated -- `fee_schedule` is genuinely un-grounded (its
-# `/sapi/v1/asset/tradeFee` endpoint is auth-gated and unimplemented) and stays
-# `verified_on = NA`, honestly `[unverified]`.
+# cassette evidence: the oracle tests replay the recorded-real fixtures under
+# `tests/testthat/fixtures/binance_*.json` (recorded-real `/exchangeInfo` --
+# single + multi-symbol -- `/klines`, `/depth`, and `/ticker/24hr` captured
+# 2026-06-13, hash-pinned in `fixtures/PROVENANCE.md`) and diff the asserted
+# facts against them on every run. No `verified_on` is ever fabricated --
+# `fee_schedule` is genuinely un-grounded (its `/sapi/v1/asset/tradeFee` endpoint
+# is auth-gated and unimplemented) and stays `verified_on = NA`, honestly
+# `[unverified]`.
 #
 # `kind`/`oracle_types` encode the recipe-52 taxonomy. The schema/enum/units
 # families are *silent* (a wrong filter field or a mis-mapped kline column
@@ -160,42 +164,56 @@ fact_grounding <- function(source, fact_family) {
 
 .BOURSE_SOURCE <- paste0(
   "Binance public REST API (api.binance.com): /api/v3/exchangeInfo + ",
-  "/api/v3/klines; oracle = recorded-real cassette replay + live catalogue diff")
+  "/api/v3/klines + /api/v3/depth + /api/v3/ticker/24hr; oracle = recorded-real ",
+  "cassette replay + live catalogue diff")
 
 # Capture date of the committed recorded-real fixtures (fixtures/PROVENANCE.md).
-.BOURSE_CASSETTE_ON <- "2026-06-11"
+.BOURSE_CASSETTE_ON <- "2026-06-13"
+
+# The grounded core symbol universe -- the symbols whose filters are diffed
+# against the live / recorded `/exchangeInfo` and so carry a real `verified_on`.
+# This is the single source of truth for the multi-symbol grounded set
+# (`bourse_catalogue_diff()` default + the multi-symbol oracle test + the
+# multi-symbol cassette recorded by `data-raw/record_fixtures.R`).
+.BOURSE_CORE_SYMBOLS <- c("BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT")
 
 .BOURSE_FACT_KIND <- c(
-  symbol_universe        = "enum",
-  tick_size              = "schema",
-  lot_size               = "schema",
-  min_notional           = "schema",
-  fee_schedule           = "constant",
-  quote_base_currency    = "schema",
-  timestamp_tz           = "units",
-  ohlcv_column_semantics = "schema")
+  symbol_universe            = "enum",
+  tick_size                  = "schema",
+  lot_size                   = "schema",
+  min_notional               = "schema",
+  fee_schedule               = "constant",
+  quote_base_currency        = "schema",
+  timestamp_tz               = "units",
+  ohlcv_column_semantics     = "schema",
+  orderbook_column_semantics = "schema",
+  ticker_column_semantics    = "schema")
 
 .BOURSE_FACT_ORACLE <- c(
-  symbol_universe        = "A,B,E",
-  tick_size              = "B,D,E",
-  lot_size               = "B,D,E",
-  min_notional           = "B,D,E",
-  fee_schedule           = "A",          # un-grounded: locator only, no D/E/F
-  quote_base_currency    = "B,E",
-  timestamp_tz           = "D,E",
-  ohlcv_column_semantics = "D,E")
+  symbol_universe            = "A,B,E",
+  tick_size                  = "B,D,E",
+  lot_size                   = "B,D,E",
+  min_notional               = "B,D,E",
+  fee_schedule               = "A",      # un-grounded: locator only, no D/E/F
+  quote_base_currency        = "B,E",
+  timestamp_tz               = "D,E",
+  ohlcv_column_semantics     = "D,E",
+  orderbook_column_semantics = "D,E",
+  ticker_column_semantics    = "D,E")
 
 # Families the committed recorded-real cassette + oracle tests actually ground.
 # `fee_schedule` is FALSE on purpose -- not grounded, not pretended.
 .BOURSE_FACT_GROUNDED <- c(
-  symbol_universe        = TRUE,
-  tick_size              = TRUE,
-  lot_size               = TRUE,
-  min_notional           = TRUE,
-  fee_schedule           = FALSE,
-  quote_base_currency    = TRUE,
-  timestamp_tz           = TRUE,
-  ohlcv_column_semantics = TRUE)
+  symbol_universe            = TRUE,
+  tick_size                  = TRUE,
+  lot_size                   = TRUE,
+  min_notional               = TRUE,
+  fee_schedule               = FALSE,
+  quote_base_currency        = TRUE,
+  timestamp_tz               = TRUE,
+  ohlcv_column_semantics     = TRUE,
+  orderbook_column_semantics = TRUE,
+  ticker_column_semantics    = TRUE)
 
 .external_facts <- local({
   seed <- .bourse_facts_seed()
@@ -216,7 +234,7 @@ fact_grounding <- function(source, fact_family) {
 
 # Silent-failure kinds: a wrong value returns wrong output with NO error, so a
 # live call "succeeding" is not enough -- they need a property / differential /
-# human oracle (D/E/F). (recipe 52 §2)
+# human oracle (D/E/F). (recipe 52 section 2)
 .silent_fact_kinds <- c("enum", "crs", "units", "constant", "schema", "rule")
 
 # NA-safe ISO date parse (never errors on bad input).
@@ -269,7 +287,8 @@ fact_grounding <- function(source, fact_family) {
       reasons <- c(reasons, "empty `oracle_types`")
     if (any(sub$kind %in% .silent_fact_kinds &
               !grepl("[DEF]", sub$oracle_types)))
-      reasons <- c(reasons, "silent kind without a D/E/F oracle (recipe 52 §2)")
+      reasons <- c(reasons,
+                   "silent kind without a D/E/F oracle (recipe 52 section 2)")
     if (any(sub$kind == "rule" &
               (is.na(sub$signoff) | !nzchar(sub$signoff))))
       reasons <- c(reasons, "`rule` kind without a `signoff`")

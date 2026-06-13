@@ -6,14 +6,17 @@
 \usage{
 bourse_catalogue_diff(
   source = "binance",
-  symbols = c("BTCUSDT"),
+  symbols = .BOURSE_CORE_SYMBOLS,
   exchange_info = NULL
 )
 }
 \arguments{
 \item{source}{The source; currently \code{"binance"}.}
 
-\item{symbols}{Symbols to verify (default: a small core set).}
+\item{symbols}{Symbols to verify. The default is the grounded core universe
+(\code{BTCUSDT}, \code{ETHUSDT}, \code{BNBUSDT}, \code{SOLUSDT}): every requested symbol's
+filters (tick size, lot size, minimum notional) and currencies must agree
+with the catalogue for the corresponding family to ground.}
 
 \item{exchange_info}{Optional recorded catalogue (the parsed \code{symbols} list
 from \verb{/exchangeInfo}).}

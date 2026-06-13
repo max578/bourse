@@ -1,10 +1,42 @@
 url: https://max578.github.io/bourse
+
 template:
   bootstrap: 5
+
 reference:
-  - title: Functions
+  - title: Market-data verbs
+    desc: >
+      The data verbs. Each returns a grounded result object or a refusal, never a
+      number it cannot stand behind.
     contents:
-      - matches(".*")
+      - bourse_ohlcv
+      - bourse_orderbook
+      - bourse_ticker
+  - title: Result objects
+    desc: The contract-typed S7 result objects and the refusal outcome.
+    contents:
+      - market_series
+      - order_book
+      - market_ticker
+      - bourse_refusal
+      - is_refusal
+  - title: Grounding (the Independent Oracle Principle)
+    desc: >
+      The provenance machinery: the catalogue-diff oracle, the external-facts
+      registry, and the canonical grounding vocabulary.
+    contents:
+      - bourse_catalogue_diff
+      - bourse_external_facts
+      - bourse_fact_status
+      - fact_grounding
+      - grounding_tokens
+      - combine_grounding
+  - title: Package
+    contents:
+      - bourse-package
+
 articles:
-  - title: Articles
+  - title: Get started
     navbar: ~
+    contents:
+      - getting-started

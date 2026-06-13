@@ -117,3 +117,43 @@ is_refusal <- function(x) {
     stringsAsFactors = FALSE
   )
 }
+
+# The grounded obs_schema for an order book. Both ladders carry a `price`
+# (in the quote currency) and a `qty` (in the base currency); the units are
+# facts about the depth response, grounded by the `orderbook_column_semantics`
+# family.
+.orderbook_obs_schema <- function(quote_ccy, base_ccy, grounding) {
+  data.frame(
+    name      = c("price", "qty"),
+    quantity  = c("price", "quantity"),
+    unit      = c(quote_ccy, base_ccy),
+    grounding = grounding,
+    stringsAsFactors = FALSE
+  )
+}
+
+# The grounded obs_schema for a 24-hour ticker. The unit of each field is a fact
+# about the ticker response (prices in the quote currency, base volume in the
+# base currency, quote volume in the quote currency, times in ms UTC), grounded
+# by the `ticker_column_semantics` family.
+.ticker_obs_schema <- function(fields, quote_ccy, base_ccy, grounding) {
+  unit_for <- c(
+    last_price = quote_ccy, open_price = quote_ccy, high_price = quote_ccy,
+    low_price = quote_ccy, price_change = quote_ccy,
+    price_change_percent = "percent", weighted_avg_price = quote_ccy,
+    volume = base_ccy, quote_volume = quote_ccy, open_time = "ms_utc",
+    close_time = "ms_utc")
+  qty_for <- c(
+    last_price = "price", open_price = "price", high_price = "price",
+    low_price = "price", price_change = "price",
+    price_change_percent = "ratio", weighted_avg_price = "price",
+    volume = "volume", quote_volume = "volume", open_time = "time",
+    close_time = "time")
+  data.frame(
+    name      = fields,
+    quantity  = unname(qty_for[fields]),
+    unit      = unname(unit_for[fields]),
+    grounding = grounding,
+    stringsAsFactors = FALSE
+  )
+}
