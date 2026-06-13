@@ -1,4 +1,4 @@
-# bourse 0.1.0.9000 (development)
+# bourse 0.1.0
 
 Broadens coverage from the single-symbol Binance-spot-OHLCV connector to a
 multi-symbol connector with three read-only market-data verbs, while keeping the

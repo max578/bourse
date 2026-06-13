@@ -1,6 +1,6 @@
 Package: bourse
 Title: Grounded Market-Data Connector for the ORCHESTRA Framework
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R:
     person(given = "Max",
            family = "Moldovan",
