@@ -11,3 +11,4 @@
 ^\.DS_Store$
 ^\.Rproj\.user$
 ^.*\.Rproj$
+^CONSTELLATION_MEMBER\.md$
