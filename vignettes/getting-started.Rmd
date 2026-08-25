@@ -24,8 +24,8 @@ counterpart of the `terroir` geo-data collector, and it is built around one
 discipline -- the **Independent Oracle Principle (IOP)**: a fact about an
 exchange (a symbol, a price tick size, a fee, a column's unit) is *unverified*
 until it has been diffed against the exchange's own catalogue. For a trading
-system that is not bookkeeping; an unverified tick size or fee is a silently
-wrong number that loses money.
+system that is risk control, not bookkeeping: an unverified tick size or fee is
+a silently wrong number that loses money.
 
 ## Two outcomes: a series, or a refusal
 
