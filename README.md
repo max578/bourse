@@ -7,9 +7,9 @@ books, 24-hour tickers) from public exchange APIs and emits it as a
 contract-typed, provenance-labelled result. It is the trading-domain
 counterpart of the `terroir` geo-data collector.
 
-Every external fact – a symbol, a price tick size, a fee, a column’s
-unit – is recorded in a provenance registry and treated as
-**unverified** until it has been diffed against the exchange’s own
+Every external fact -- a symbol, a price tick size, a fee, a column's
+unit -- is recorded in a provenance registry and treated as
+**unverified** until it has been diffed against the exchange's own
 catalogue (the Independent Oracle Principle). An ungrounded fact
 triggers a refusal rather than a silently wrong number. For a trading
 system that is risk control, not bookkeeping: an unverified tick size or
@@ -56,7 +56,7 @@ grounding label.
 ## Grounding: the catalogue-diff oracle
 
 `bourse_catalogue_diff()` is the only operation that grounds a fact. It
-diffs the asserted facts against the exchange’s own `/exchangeInfo`
+diffs the asserted facts against the exchange's own `/exchangeInfo`
 catalogue and grounds those that agree with a real date. By default it
 grounds the multi-symbol core universe (`BTCUSDT`, `ETHUSDT`, `BNBUSDT`,
 `SOLUSDT`).
@@ -74,7 +74,7 @@ bourse_fact_status("binance")
 `/sapi/v1/asset/tradeFee` endpoint, which would introduce an
 API-credential surface; it is deliberately not implemented. That fact
 stays honestly `[unverified]` in the registry rather than substituting a
-documentation default the package cannot diff against the account’s
+documentation default the package cannot diff against the account's
 actual fee tier. See `SECURITY.md`.
 
 ## License

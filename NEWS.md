@@ -1,3 +1,17 @@
+# bourse (development version)
+
+## Documentation
+
+* Fixed a missing possessive in the package description ("the exchange own
+  catalogue" -> "the exchange's own catalogue"), corrected on `DESCRIPTION`,
+  the package-level roxygen block and `man/bourse-package.Rd`.
+* Fixed a garbled, semicolon-spliced sentence in the *Getting started with
+  bourse* vignette's opening section (the intended sense, already correct in
+  `README.md`, is "a trading system that is risk control, not bookkeeping").
+* Replaced stray Unicode en dashes and curly quotation marks in `README.md`
+  with the house-style ASCII `--` and straight quotes (`README.Rmd`, the
+  knitted source, was already clean).
+
 # bourse 0.1.0
 
 Broadens coverage from the single-symbol Binance-spot-OHLCV connector to a
