@@ -23,11 +23,11 @@ family has a non-\code{NA} \code{verified_on}.
 fact_grounding("binance", "tick_size")
 }
 \seealso{
-Other grounding: 
-\code{\link{bourse_catalogue_diff}()},
-\code{\link{bourse_external_facts}()},
-\code{\link{bourse_fact_status}()},
-\code{\link{combine_grounding}()},
+Other grounding:
+\code{\link[=bourse_catalogue_diff]{bourse_catalogue_diff()}},
+\code{\link[=bourse_external_facts]{bourse_external_facts()}},
+\code{\link[=bourse_fact_status]{bourse_fact_status()}},
+\code{\link[=combine_grounding]{combine_grounding()}},
 \code{\link{grounding_tokens}}
 }
 \concept{grounding}

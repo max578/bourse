@@ -49,7 +49,7 @@ payload <- list(
 bourse_ticker("BTCUSDT", ticker = payload)
 }
 \seealso{
-Other ticker: 
-\code{\link{market_ticker}()}
+Other ticker:
+\code{\link[=market_ticker]{market_ticker()}}
 }
 \concept{ticker}

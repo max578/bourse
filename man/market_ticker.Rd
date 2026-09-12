@@ -44,7 +44,7 @@ tk <- market_ticker(
 tk@symbol
 }
 \seealso{
-Other ticker: 
-\code{\link{bourse_ticker}()}
+Other ticker:
+\code{\link[=bourse_ticker]{bourse_ticker()}}
 }
 \concept{ticker}

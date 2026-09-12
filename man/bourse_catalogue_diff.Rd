@@ -48,11 +48,11 @@ info <- list(symbols = list(list(
 bourse_catalogue_diff("binance", symbols = "BTCUSDT", exchange_info = info)
 }
 \seealso{
-Other grounding: 
-\code{\link{bourse_external_facts}()},
-\code{\link{bourse_fact_status}()},
-\code{\link{combine_grounding}()},
-\code{\link{fact_grounding}()},
+Other grounding:
+\code{\link[=bourse_external_facts]{bourse_external_facts()}},
+\code{\link[=bourse_fact_status]{bourse_fact_status()}},
+\code{\link[=combine_grounding]{combine_grounding()}},
+\code{\link[=fact_grounding]{fact_grounding()}},
 \code{\link{grounding_tokens}}
 }
 \concept{grounding}

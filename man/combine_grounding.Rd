@@ -23,11 +23,11 @@ mistaken for grounded.
 combine_grounding(c(grounding_grounded(), grounding_unverified()))
 }
 \seealso{
-Other grounding: 
-\code{\link{bourse_catalogue_diff}()},
-\code{\link{bourse_external_facts}()},
-\code{\link{bourse_fact_status}()},
-\code{\link{fact_grounding}()},
+Other grounding:
+\code{\link[=bourse_catalogue_diff]{bourse_catalogue_diff()}},
+\code{\link[=bourse_external_facts]{bourse_external_facts()}},
+\code{\link[=bourse_fact_status]{bourse_fact_status()}},
+\code{\link[=fact_grounding]{fact_grounding()}},
 \code{\link{grounding_tokens}}
 }
 \concept{grounding}

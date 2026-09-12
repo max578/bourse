@@ -50,7 +50,7 @@ ob <- order_book(
 ob@symbol
 }
 \seealso{
-Other orderbook: 
-\code{\link{bourse_orderbook}()}
+Other orderbook:
+\code{\link[=bourse_orderbook]{bourse_orderbook()}}
 }
 \concept{orderbook}

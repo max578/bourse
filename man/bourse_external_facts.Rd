@@ -19,11 +19,11 @@ when un-grounded). This makes the grounding state of every fact auditable.
 bourse_external_facts()
 }
 \seealso{
-Other grounding: 
-\code{\link{bourse_catalogue_diff}()},
-\code{\link{bourse_fact_status}()},
-\code{\link{combine_grounding}()},
-\code{\link{fact_grounding}()},
+Other grounding:
+\code{\link[=bourse_catalogue_diff]{bourse_catalogue_diff()}},
+\code{\link[=bourse_fact_status]{bourse_fact_status()}},
+\code{\link[=combine_grounding]{combine_grounding()}},
+\code{\link[=fact_grounding]{fact_grounding()}},
 \code{\link{grounding_tokens}}
 }
 \concept{grounding}

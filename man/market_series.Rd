@@ -44,9 +44,9 @@ s <- market_series(data = data.frame(close = 1), symbol = "X",
 s@symbol
 }
 \seealso{
-Other series: 
-\code{\link{bourse_ohlcv}()},
-\code{\link{bourse_refusal}()},
-\code{\link{is_refusal}()}
+Other series:
+\code{\link[=bourse_ohlcv]{bourse_ohlcv()}},
+\code{\link[=bourse_refusal]{bourse_refusal()}},
+\code{\link[=is_refusal]{is_refusal()}}
 }
 \concept{series}

@@ -51,7 +51,7 @@ payload <- list(
 bourse_orderbook("BTCUSDT", depth = payload)
 }
 \seealso{
-Other orderbook: 
-\code{\link{order_book}()}
+Other orderbook:
+\code{\link[=order_book]{order_book()}}
 }
 \concept{orderbook}

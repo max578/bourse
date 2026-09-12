@@ -20,9 +20,9 @@ is_refusal(bourse_refusal(reason = "x"))
 is_refusal(42)
 }
 \seealso{
-Other series: 
-\code{\link{bourse_ohlcv}()},
-\code{\link{bourse_refusal}()},
-\code{\link{market_series}()}
+Other series:
+\code{\link[=bourse_ohlcv]{bourse_ohlcv()}},
+\code{\link[=bourse_refusal]{bourse_refusal()}},
+\code{\link[=market_series]{market_series()}}
 }
 \concept{series}

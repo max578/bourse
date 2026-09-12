@@ -55,9 +55,9 @@ fixture <- cbind(
 bourse_ohlcv("BTCUSDT", interval = "1d", candles = fixture)
 }
 \seealso{
-Other series: 
-\code{\link{bourse_refusal}()},
-\code{\link{is_refusal}()},
-\code{\link{market_series}()}
+Other series:
+\code{\link[=bourse_refusal]{bourse_refusal()}},
+\code{\link[=is_refusal]{is_refusal()}},
+\code{\link[=market_series]{market_series()}}
 }
 \concept{series}

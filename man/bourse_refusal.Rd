@@ -30,9 +30,9 @@ be caught and ignored.
 bourse_refusal(reason = "fact_ungrounded", detail = "tick size unverified")
 }
 \seealso{
-Other series: 
-\code{\link{bourse_ohlcv}()},
-\code{\link{is_refusal}()},
-\code{\link{market_series}()}
+Other series:
+\code{\link[=bourse_ohlcv]{bourse_ohlcv()}},
+\code{\link[=is_refusal]{is_refusal()}},
+\code{\link[=market_series]{market_series()}}
 }
 \concept{series}
