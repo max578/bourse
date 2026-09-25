@@ -15,11 +15,11 @@ the guard hash in `test-catalogue-diff.R`).
 
 | fixture | source_url | captured_on | tool | sha256 | md5 | redaction |
 |---|---|---|---|---|---|---|
-| `binance_exchangeInfo_BTCUSDT.json` | `https://api.binance.com/api/v3/exchangeInfo?symbol=BTCUSDT` | 2026-06-13 | httr2 | `62141b35758733b5fed50ddfdc957e682873ad810d013937985771b2db6be5c1` | `e6f23b4bd5f3d1a652fe21d6b35cc1b7` | none (public market metadata) |
-| `binance_exchangeInfo_multi.json` | `https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","ETHUSDT","BNBUSDT","SOLUSDT"]` | 2026-06-13 | httr2 | `cea53b3d960accd0e3da73b7ee46214975634ce9be433811f9409fac916eaf81` | `da9eb072c62a39a7fcfa69078b606571` | none (public market metadata) |
-| `binance_klines_BTCUSDT_1d.json` | `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=2` | 2026-06-13 | httr2 | `b93ac1e38f66166492a7971bd1e97f0e5341cd0fbe3648513214140bcd80c65c` | `f3830885f9afa9555d39be6d201d3519` | none (public market data) |
-| `binance_depth_BTCUSDT.json` | `https://api.binance.com/api/v3/depth?symbol=BTCUSDT&limit=5` | 2026-06-13 | httr2 | `20a44dd6b570e4ee9a1688e2208b559e45a3f61bc7ea0231eca906faf7233b13` | `be49abab6a4d68be4f2da38f27ad8caf` | none (public market data) |
-| `binance_ticker24hr_BTCUSDT.json` | `https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT` | 2026-06-13 | httr2 | `007d8789b0ba4b94b58957783b5d41ed55d575a757965efa633068fa1f2e773e` | `2e0d75f3dedeb9802320b89c431ca6b8` | none (public market data) |
+| `binance_exchangeInfo_BTCUSDT.json` | `https://api.binance.com/api/v3/exchangeInfo?symbol=BTCUSDT` | 2026-09-25 | httr2 | `c277269808369aef5bfee7644d82c1dd78a3023d0b8fec6dada8dfea12624d50` | `bdeb13b0fecd7b5ba9905ea15fb530c5` | none (public market metadata) |
+| `binance_exchangeInfo_multi.json` | `https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","ETHUSDT","BNBUSDT","SOLUSDT"]` | 2026-09-25 | httr2 | `62e63e3cb3f1128ab0eb57fa49a1bb23b10d2630e50001462a1130508a05a3ca` | `3380ecfd0eedc78177700444d3d70d67` | none (public market metadata) |
+| `binance_klines_BTCUSDT_1d.json` | `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=2` | 2026-09-25 | httr2 | `3af1985896564d2e5f10c4497c82ec546ff993d263c31aeb1ba08226e4caab91` | `ebd3fb59717da6bdc5e81cb53073bfa4` | none (public market data) |
+| `binance_depth_BTCUSDT.json` | `https://api.binance.com/api/v3/depth?symbol=BTCUSDT&limit=5` | 2026-09-25 | httr2 | `c5dbfca399ba7642cd8c2741bd2c2ae9b230af2df8ecf193777f9f288a6e0cd3` | `40b2f075f1f16141a28c7ecaefd933db` | none (public market data) |
+| `binance_ticker24hr_BTCUSDT.json` | `https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT` | 2026-09-25 | httr2 | `2f76362459baebd91cff60ed37774d305888ffb51fa7c360b9b5df8e4cdaa8ac` | `c5002f2d23db62fee5ac7f5d8c295f03` | none (public market data) |
 
 Notes:
 

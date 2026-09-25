@@ -146,7 +146,7 @@ fact_grounding <- function(source, fact_family) {
 # cassette evidence: the oracle tests replay the recorded-real fixtures under
 # `tests/testthat/fixtures/binance_*.json` (recorded-real `/exchangeInfo` --
 # single + multi-symbol -- `/klines`, `/depth`, and `/ticker/24hr` captured
-# 2026-06-13, hash-pinned in `fixtures/PROVENANCE.md`) and diff the asserted
+# 2026-09-25, hash-pinned in `fixtures/PROVENANCE.md`) and diff the asserted
 # facts against them on every run. No `verified_on` is ever fabricated --
 # `fee_schedule` is genuinely un-grounded (its `/sapi/v1/asset/tradeFee` endpoint
 # is auth-gated and unimplemented) and stays `verified_on = NA`, honestly
@@ -168,7 +168,7 @@ fact_grounding <- function(source, fact_family) {
   "cassette replay + live catalogue diff")
 
 # Capture date of the committed recorded-real fixtures (fixtures/PROVENANCE.md).
-.BOURSE_CASSETTE_ON <- "2026-06-13"
+.BOURSE_CASSETTE_ON <- "2026-09-25"
 
 # The grounded core symbol universe -- the symbols whose filters are diffed
 # against the live / recorded `/exchangeInfo` and so carry a real `verified_on`.

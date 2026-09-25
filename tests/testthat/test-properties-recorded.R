@@ -19,11 +19,11 @@ test_that("the recorded-real cassettes match their pinned hashes (meta-oracle)",
   # A silent re-record (e.g. one that reintroduced the legacy MIN_NOTIONAL name)
   # changes the hash and fails here -- the meta-oracle (recipe 52 section 8).
   expected <- c(
-    binance_exchangeInfo_BTCUSDT.json = "e6f23b4bd5f3d1a652fe21d6b35cc1b7",
-    binance_exchangeInfo_multi.json   = "da9eb072c62a39a7fcfa69078b606571",
-    binance_klines_BTCUSDT_1d.json    = "f3830885f9afa9555d39be6d201d3519",
-    binance_depth_BTCUSDT.json        = "be49abab6a4d68be4f2da38f27ad8caf",
-    binance_ticker24hr_BTCUSDT.json   = "2e0d75f3dedeb9802320b89c431ca6b8")
+    binance_exchangeInfo_BTCUSDT.json = "bdeb13b0fecd7b5ba9905ea15fb530c5",
+    binance_exchangeInfo_multi.json   = "3380ecfd0eedc78177700444d3d70d67",
+    binance_klines_BTCUSDT_1d.json    = "ebd3fb59717da6bdc5e81cb53073bfa4",
+    binance_depth_BTCUSDT.json        = "40b2f075f1f16141a28c7ecaefd933db",
+    binance_ticker24hr_BTCUSDT.json   = "c5002f2d23db62fee5ac7f5d8c295f03")
   for (fname in names(expected)) {
     expect_identical(unname(tools::md5sum(.fixture_path(fname))),
                      expected[[fname]])

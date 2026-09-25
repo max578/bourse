@@ -1,5 +1,11 @@
 # bourse (development version)
 
+## Testing
+
+* The recorded Binance responses were captured again on 2026-09-25, which
+  restarts the 90-day re-grounding window. The asserted facts still match the
+  new capture.
+
 ## Documentation
 
 * Fixed a missing possessive in the package description ("the exchange own

@@ -14,7 +14,7 @@
   # fails here, so a fixture can never quietly drift away from the real
   # authority.
   if (!identical(unname(tools::md5sum(path)),
-                 "e6f23b4bd5f3d1a652fe21d6b35cc1b7")) {
+                 "bdeb13b0fecd7b5ba9905ea15fb530c5")) {
     stop("recorded cassette hash drift: re-run data-raw/record_fixtures.R and ",
          "update PROVENANCE.md + the asserted hashes.", call. = FALSE)
   }
@@ -27,7 +27,7 @@
   skip_if_not_installed("jsonlite")
   path <- testthat::test_path("fixtures", "binance_exchangeInfo_multi.json")
   if (!identical(unname(tools::md5sum(path)),
-                 "da9eb072c62a39a7fcfa69078b606571")) {
+                 "3380ecfd0eedc78177700444d3d70d67")) {
     stop("recorded multi-symbol cassette hash drift: re-run ",
          "data-raw/record_fixtures.R and update PROVENANCE.md + the hashes.",
          call. = FALSE)
