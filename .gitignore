@@ -8,3 +8,6 @@ docs
 Meta
 doc
 .DS_Store
+.claude/
+.positai/
+.cursor/

@@ -21,7 +21,7 @@ fee is a number that loses money.
 pak::pak("max578/bourse")
 ```
 
-## Two outcomes: a result, or a refusal
+## Usage
 
 Each verb returns either a grounded result object or a `bourse_refusal`.
 Here we parse recorded fixtures offline (the live path uses the
@@ -76,6 +76,18 @@ API-credential surface; it is deliberately not implemented. That fact
 stays honestly `[unverified]` in the registry rather than substituting a
 documentation default the package cannot diff against the account's
 actual fee tier. See `SECURITY.md`.
+
+## Contributing
+
+Bug reports and suggestions are welcome through the
+[issue tracker](https://github.com/max578/bourse/issues). See
+`CONTRIBUTING.md` for how to propose a change.
+
+## Citation
+
+``` r
+citation("bourse")
+```
 
 ## License
 

@@ -12,3 +12,6 @@
 ^\.Rproj\.user$
 ^.*\.Rproj$
 ^CONSTELLATION_MEMBER\.md$
+^\.claude$
+^\.positai$
+^\.cursor$
