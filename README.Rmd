@@ -1,12 +1,20 @@
 ---
-output: github_document
+output:
+  github_document:
+    md_extensions: "-smart"
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.path = "man/figures/")
 ```
 
-# bourse
+# bourse <img src="man/figures/logo.png" align="right" height="139" alt="bourse logo" />
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/max578/bourse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/max578/bourse/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/max578/bourse/graph/badge.svg)](https://app.codecov.io/gh/max578/bourse)
+[![r-universe](https://max578.r-universe.dev/badges/bourse)](https://max578.r-universe.dev/bourse)
+<!-- badges: end -->
 
 `bourse` is the market-data connector of the ORCHESTRA analytics framework: it
 fetches cryptocurrency market data (OHLCV candles, order books, 24-hour tickers)
@@ -19,6 +27,23 @@ diffed against the exchange's own catalogue (the Independent Oracle Principle).
 An ungrounded fact triggers a refusal rather than a silently wrong number. For a
 trading system that is risk control, not bookkeeping: an unverified tick size or
 fee is a number that loses money.
+
+## Related packages
+
+- [cryptoQuotes](https://CRAN.R-project.org/package=cryptoQuotes) returns
+  OHLC market data from major cryptocurrency exchanges as `xts` series, with
+  sentiment indicators and interactive charts.
+- [crypto2](https://CRAN.R-project.org/package=crypto2) downloads
+  cryptocurrency information and daily historical prices from CoinMarketCap
+  and CoinGecko.
+- [binancer](https://CRAN.R-project.org/package=binancer) is a client for the
+  Binance public REST API, for data collection, portfolio management and
+  trading.
+
+bourse reads Binance's public endpoints too, but each result carries the
+grounding status of the facts it rests on (symbol, tick size, fee, units),
+checked against the exchange's own catalogue, and it returns a refusal
+instead of a value when a fact has not been checked.
 
 ## Installation
 

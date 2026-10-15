@@ -1,5 +1,9 @@
 # bourse (development version)
 
+* The package has a logo.
+* README carries status badges and lists related packages.
+* CI runs lintr (report-only) and test coverage.
+
 ## Testing
 
 * The recorded Binance responses were captured again on 2026-09-25, which
