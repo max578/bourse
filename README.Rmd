@@ -28,6 +28,8 @@ An ungrounded fact triggers a refusal rather than a silently wrong number. For a
 trading system that is risk control, not bookkeeping: an unverified tick size or
 fee is a number that loses money.
 
+`bourse` supplies market data only. It gives no financial or trading advice.
+
 ## Related packages
 
 - [cryptoQuotes](https://CRAN.R-project.org/package=cryptoQuotes) returns

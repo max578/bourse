@@ -85,7 +85,7 @@ bourse_orderbook("BTCUSDT", depth = list(
 ## The provenance registry
 
 Every fact bourse asserts is in a registry, with the date it was last checked.
-Until the oracle runs, every family is honestly `[unverified]`:
+Until the oracle runs, every family is `[unverified]`:
 
 ```{r}
 bourse_fact_status("binance")
@@ -94,7 +94,7 @@ bourse_fact_status("binance")
 The `fee_schedule` family is deliberately never grounded here: its authority is
 the authenticated `/sapi/v1/asset/tradeFee` endpoint, which would introduce an
 API-credential surface. `bourse` reads public, anonymous endpoints only, so the
-fee schedule stays honestly `[unverified]` rather than substituting a
+fee schedule stays `[unverified]` rather than substituting a
 documentation default it cannot diff against the account's actual fee tier.
 
 ## Grounding: the catalogue-diff oracle
@@ -127,5 +127,5 @@ bourse_ohlcv("BTCUSDT", candles = fixture)@grounding
 `bourse` feeds the trading members (`kalmix`, `proxymix`) and the `decideR`
 decision layer. Because the series carries its grounding label, an un-grounded
 price feed propagates worst-case through the pipeline and `decideR` forces a flat
-position -- the capital firewall. The connector's honesty is the trading system's
+position -- the capital firewall. Reporting what is not grounded is the trading system's
 risk control.

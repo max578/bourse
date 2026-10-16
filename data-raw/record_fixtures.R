@@ -1,7 +1,7 @@
 # record_fixtures.R -- re-ground bourse's recorded-real Binance cassettes.
 #
 # Run interactively (needs network) to re-capture the recorded-real fixtures the
-# oracle tests replay. This is the recipe-52 section-7 re-grounding script: it
+# oracle tests replay. This is the re-grounding script: it
 # hits the live authority, rewrites the committed cassettes, and prints the new
 # sha256 + md5 so PROVENANCE.md and the hash literals in the oracle tests
 # (test-properties-recorded.R, test-catalogue-diff.R) can be updated in lockstep.

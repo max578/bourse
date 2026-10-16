@@ -68,8 +68,8 @@ bourse_external_facts <- function() {
 #'
 #' A compact summary of how many fact families are grounded versus
 #' `[unverified]`, per source. A connector that reports all families
-#' `[unverified]` is being honest about an un-run grounding check -- never a
-#' fabricated date.
+#' `[unverified]` states that the grounding check has not run -- it never
+#' reports a fabricated date.
 #'
 #' @param source Optional source to filter on (e.g. `"binance"`).
 #' @return A `data.frame` with `source`, `n_facts`, `n_grounded`,
@@ -136,7 +136,7 @@ fact_grounding <- function(source, fact_family) {
 }
 
 # =============================================================================
-# Canonical recipe-52 registry (the /rpkg audit's F13/F14 contract surface)
+# External-facts registry
 # =============================================================================
 # Derived from `.bourse_facts_seed()` so there is ONE source of truth for the
 # family list + asserted values (a drift-guard test asserts the two agree). The
@@ -149,10 +149,10 @@ fact_grounding <- function(source, fact_family) {
 # 2026-09-25, hash-pinned in `fixtures/PROVENANCE.md`) and diff the asserted
 # facts against them on every run. No `verified_on` is ever fabricated --
 # `fee_schedule` is genuinely un-grounded (its `/sapi/v1/asset/tradeFee` endpoint
-# is auth-gated and unimplemented) and stays `verified_on = NA`, honestly
+# is auth-gated and unimplemented) and stays `verified_on = NA`, so
 # `[unverified]`.
 #
-# `kind`/`oracle_types` encode the recipe-52 taxonomy. The schema/enum/units
+# `kind`/`oracle_types` encode the fact taxonomy. The schema/enum/units
 # families are *silent* (a wrong filter field or a mis-mapped kline column
 # returns wrong output with NO error), so they carry a D/E/F oracle: D = physical
 # / structural property invariants asserted on the recorded-real extract
@@ -234,7 +234,7 @@ fact_grounding <- function(source, fact_family) {
 
 # Silent-failure kinds: a wrong value returns wrong output with NO error, so a
 # live call "succeeding" is not enough -- they need a property / differential /
-# human oracle (D/E/F). (recipe 52 section 2)
+# human oracle (D/E/F).
 .silent_fact_kinds <- c("enum", "crs", "units", "constant", "schema", "rule")
 
 # NA-safe ISO date parse (never errors on bad input).
@@ -248,7 +248,7 @@ fact_grounding <- function(source, fact_family) {
 #' has a non-empty `source` + a parseable, in-window `verified_on`, a non-empty
 #' `oracle_types` that includes a D/E/F oracle for silent kinds (and a `signoff`
 #' for `rule` kinds), AND the family is referenced by an independent-oracle test
-#' file. An un-grounded family (`verified_on = NA`, e.g. `fee_schedule`) honestly
+#' file. An un-grounded family (`verified_on = NA`, e.g. `fee_schedule`)
 #' fails -- it is `[unverified]` by design, surfaced, never papered over.
 #'
 #' @param registry The registry `data.frame` (default `.external_facts`).
@@ -288,7 +288,7 @@ fact_grounding <- function(source, fact_family) {
     if (any(sub$kind %in% .silent_fact_kinds &
               !grepl("[DEF]", sub$oracle_types)))
       reasons <- c(reasons,
-                   "silent kind without a D/E/F oracle (recipe 52 section 2)")
+                   "silent kind without a D/E/F oracle")
     if (any(sub$kind == "rule" &
               (is.na(sub$signoff) | !nzchar(sub$signoff))))
       reasons <- c(reasons, "`rule` kind without a `signoff`")

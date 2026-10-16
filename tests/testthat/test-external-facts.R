@@ -1,4 +1,4 @@
-test_that("the registry seeds every fact family un-grounded (honest NA)", {
+test_that("the registry seeds every fact family un-grounded (NA)", {
   .registry_init()
   facts <- bourse_external_facts()
   expect_true(all(c("source", "fact_family", "asserted_value", "oracle_kind",

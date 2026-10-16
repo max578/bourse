@@ -14,7 +14,7 @@ a new external fact (a new endpoint's columns, a new symbol's filters, a new
 exchange's conventions) must:
 
 1. Add the fact to the provenance registry (`R/external_facts.R`) with the
-   honest default `verified_on = NA`.
+   default `verified_on = NA`.
 2. Ground it against the authority with a **recorded-real cassette** -- a payload
    captured from the live API by `data-raw/record_fixtures.R`, never a
    hand-authored literal. A hand-authored fixture is the circular mock that hides
@@ -24,7 +24,7 @@ exchange's conventions) must:
    oracle on the captured payload.
 
 If a fact cannot be grounded, leave it `[unverified]` and have the verb refuse,
-rather than returning a number the package cannot stand behind. Honest abstention
+rather than returning a number the package cannot stand behind. Abstention
 beats a silently wrong number.
 
 ## Development workflow

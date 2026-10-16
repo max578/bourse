@@ -11,3 +11,6 @@ doc
 .claude/
 .positai/
 .cursor/
+
+# internal coordination note, kept local
+CONSTELLATION_MEMBER.md

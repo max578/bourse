@@ -1,4 +1,4 @@
-# Recorded-real property oracle (recipe 52 section 5, oracle D). Asserts physical
+# Recorded-real property oracle (oracle D). Asserts physical
 # / structural invariants on the committed recorded-real Binance cassettes
 # (fixtures/binance_*.json, hash-pinned in fixtures/PROVENANCE.md). These are the
 # silent-escape facts (schema / units / enum): a wrong filter field or a
@@ -6,7 +6,7 @@
 # REAL captured payload -- not a hand-authored fixture -- is what grounds them.
 # The cassette is the independent oracle the code did not author.
 #
-# Family coverage (recipe 52 F14): this oracle grounds symbol_universe,
+# Family coverage: this oracle grounds symbol_universe,
 # tick_size, lot_size, min_notional, quote_base_currency, timestamp_tz,
 # ohlcv_column_semantics, orderbook_column_semantics, and
 # ticker_column_semantics.
@@ -17,7 +17,7 @@ test_that("the recorded-real cassettes match their pinned hashes (meta-oracle)",
   # tools::md5sum is base R, so this tamper-evidence runs everywhere with no
   # added dependency; the sha256 in PROVENANCE.md is for external verification.
   # A silent re-record (e.g. one that reintroduced the legacy MIN_NOTIONAL name)
-  # changes the hash and fails here -- the meta-oracle (recipe 52 section 8).
+  # changes the hash and fails here.
   expected <- c(
     binance_exchangeInfo_BTCUSDT.json = "bdeb13b0fecd7b5ba9905ea15fb530c5",
     binance_exchangeInfo_multi.json   = "3380ecfd0eedc78177700444d3d70d67",
@@ -52,7 +52,7 @@ test_that("exchangeInfo filters carry the asserted schema + plausible values", {
   expect_gt(as.numeric(fl[["LOT_SIZE"]]$stepSize), 0)
 
   # min_notional: the CURRENT spot filter is NOTIONAL.minNotional, NOT the legacy
-  # MIN_NOTIONAL (the round-3 grounding correction). Assert both the corrected
+  # MIN_NOTIONAL (corrected against the live API). Assert both the corrected
   # belief and a plausible value.
   expect_true("NOTIONAL" %in% ft)
   expect_false("MIN_NOTIONAL" %in% ft)

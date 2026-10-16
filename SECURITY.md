@@ -8,7 +8,7 @@ REST: `/api/v3/exchangeInfo`, `/api/v3/klines`, `/api/v3/depth`,
 keys, account credentials, or any private account data. The authenticated fee
 endpoint (`/sapi/v1/asset/tradeFee`) is deliberately **not** implemented: it
 would introduce a credential surface, and the `fee_schedule` fact is therefore
-honestly reported `[unverified]` rather than fetched.
+reported as `[unverified]` rather than fetched.
 
 If you are wiring `bourse` into a system that *does* hold exchange credentials,
 keep those credentials out of `bourse`'s call path entirely.

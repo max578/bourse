@@ -16,8 +16,8 @@ A \code{data.frame} with \code{source}, \code{n_facts}, \code{n_grounded},
 \description{
 A compact summary of how many fact families are grounded versus
 \verb{[unverified]}, per source. A connector that reports all families
-\verb{[unverified]} is being honest about an un-run grounding check -- never a
-fabricated date.
+\verb{[unverified]} states that the grounding check has not run -- it never
+reports a fabricated date.
 }
 \examples{
 bourse_fact_status()

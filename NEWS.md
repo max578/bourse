@@ -59,7 +59,7 @@ trusted.
   `ticker_column_semantics` -- join the provenance registry, grounded by
   recorded-real property oracles on the captured depth and ticker payloads.
 * The recorded-real cassettes were re-captured against the live Binance authority
-  on 2026-06-13 (the recipe-52 re-grounding step, restarting the 90-day window),
+  on 2026-06-13 (the re-grounding step, restarting the 90-day window),
   and a multi-symbol `/exchangeInfo` cassette was added. New cassettes:
   `binance_exchangeInfo_multi.json`, `binance_depth_BTCUSDT.json`,
   `binance_ticker24hr_BTCUSDT.json`. All are hash-pinned in
@@ -70,7 +70,7 @@ trusted.
 
 ## Known gaps
 
-* `fee_schedule` remains honestly `[unverified]`. Its authority is the
+* `fee_schedule` remains `[unverified]`. Its authority is the
   authenticated `/sapi/v1/asset/tradeFee` endpoint, which would introduce an API
   credential surface; it is deliberately not implemented (see `SECURITY.md`). The
   registry reports it `[unverified]` rather than substituting a documentation
@@ -124,11 +124,11 @@ catalogue and candle fixtures.
   `NOTIONAL`. The catalogue diff accepts either for back-compat; the
   recorded-real property test fails loudly if a re-record reintroduces the
   legacy name.
-* `.external_facts` is now the canonical recipe-52 registry (`family`, `kind`,
+* `.external_facts` is now the canonical external-facts registry (`family`, `kind`,
   `value`, `source`, `verified_on`, `reverify_by`, `oracle_types`, `signoff`),
   validated per-family by `.validate_external_registry()` (gate F13/F14). Seven
   fact families are grounded by the recorded-real cassette; `fee_schedule` is
-  honestly reported `[unverified]` (its auth-gated `/sapi` endpoint is
+  reported as `[unverified]` (its auth-gated `/sapi` endpoint is
   unimplemented).
 * `data-raw/record_fixtures.R` re-captures the cassettes against the live
-  authority and prints the new hashes (the recipe-52 re-grounding script).
+  authority and prints the new hashes (the re-grounding script).

@@ -3,14 +3,14 @@
 # /exchangeInfo response captured from the live authority
 # (fixtures/binance_exchangeInfo_*.json, hash-pinned in fixtures/PROVENANCE.md)
 # -- NOT a hand-authored golden of bourse's own making, which is the circular
-# mock that let the legacy `MIN_NOTIONAL` name ride green until the round-3
-# grounding audit caught it against the live authority. A separate network test
+# mock that let the legacy `MIN_NOTIONAL` name pass the tests until a check
+# against the live API caught it. A separate network test
 # grounds against the live authority (skipped on CRAN / offline).
 
 .recorded_exchange_info <- function() {
   skip_if_not_installed("jsonlite")
   path <- testthat::test_path("fixtures", "binance_exchangeInfo_BTCUSDT.json")
-  # Meta-oracle (recipe 52 section 8): a silent re-record changes the hash and
+  # A silent re-record changes the hash and
   # fails here, so a fixture can never quietly drift away from the real
   # authority.
   if (!identical(unname(tools::md5sum(path)),
