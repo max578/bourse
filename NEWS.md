@@ -1,4 +1,4 @@
-# bourse (development version)
+# bourse 0.1.0
 
 * The package has a logo.
 * README carries status badges and lists related packages.
