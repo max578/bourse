@@ -98,7 +98,7 @@ bourse_fact_status("binance")
 **`fee_schedule`** is sourced from the authenticated
 `/sapi/v1/asset/tradeFee` endpoint, which would introduce an
 API-credential surface; it is deliberately not implemented. That fact
-stays honestly `[unverified]` in the registry rather than substituting a
+stays `[unverified]` in the registry rather than substituting a
 documentation default the package cannot diff against the account's
 actual fee tier. See `SECURITY.md`.
 
