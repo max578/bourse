@@ -11,9 +11,11 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.path = "man/figures/"
 # bourse <img src="man/figures/logo.png" align="right" height="139" alt="bourse logo" />
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/max578/bourse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/max578/bourse/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/max578/bourse/graph/badge.svg)](https://app.codecov.io/gh/max578/bourse)
 [![r-universe](https://max578.r-universe.dev/badges/bourse)](https://max578.r-universe.dev/bourse)
+[![pkgdown](https://github.com/max578/bourse/actions/workflows/pkgdown.yaml/badge.svg)](https://max578.github.io/bourse/)
 <!-- badges: end -->
 
 `bourse` is the market-data connector of the ORCHESTRA analytics framework: it
