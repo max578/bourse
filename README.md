@@ -7,7 +7,6 @@
 [![R-CMD-check](https://github.com/max578/bourse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/max578/bourse/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/max578/bourse/graph/badge.svg)](https://app.codecov.io/gh/max578/bourse)
-[![r-universe](https://max578.r-universe.dev/badges/bourse)](https://max578.r-universe.dev/bourse)
 [![pkgdown](https://github.com/max578/bourse/actions/workflows/pkgdown.yaml/badge.svg)](https://max578.github.io/bourse/)
 <!-- badges: end -->
 
